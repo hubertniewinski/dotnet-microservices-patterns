@@ -6,12 +6,12 @@
     <Project Path="src/OrderService/OrderService.Domain/OrderService.Domain.csproj" />
     <Project Path="src/OrderService/OrderService.Infrastructure/OrderService.Infrastructure.csproj" />
   </Folder>
-  <!-- <Folder Name="/src/WalletService/">
+  <Folder Name="/src/WalletService/">
     <Project Path="src/WalletService/WalletService.API/WalletService.API.csproj" />
     <Project Path="src/WalletService/WalletService.Application/WalletService.Application.csproj" />
     <Project Path="src/WalletService/WalletService.Domain/WalletService.Domain.csproj" />
     <Project Path="src/WalletService/WalletService.Infrastructure/WalletService.Infrastructure.csproj" />
-  </Folder> -->
+  </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/OrderService.Tests/OrderService.Tests.csproj" />
     <Project Path="tests/WalletService.Tests/WalletService.Tests.csproj" />
