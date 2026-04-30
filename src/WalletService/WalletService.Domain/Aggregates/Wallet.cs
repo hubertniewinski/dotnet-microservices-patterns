@@ -10,6 +10,8 @@ public class Wallet
     public decimal Balance { get; private set; }
     private readonly List<IDomainEvent> _events = new();
     public IReadOnlyList<IDomainEvent> DomainEvents => _events.AsReadOnly();
+    
+    public void ClearDomainEvents() => _events.Clear();
 
     public static Wallet Create(Guid userId, decimal initialBalance) 
         => new Wallet { Id = Guid.NewGuid(), UserId = userId, Balance = initialBalance };
