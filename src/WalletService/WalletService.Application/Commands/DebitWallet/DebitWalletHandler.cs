@@ -20,6 +20,6 @@ public class DebitWalletHandler : IRequestHandler<DebitWalletCommand>
 
         wallet.Debit(request.Amount, request.OrderId);
 
-        await _walletRepository.SaveAsync(wallet, cancellationToken);
+        await _walletRepository.SaveAsync(wallet, ct: cancellationToken);
     }
 }

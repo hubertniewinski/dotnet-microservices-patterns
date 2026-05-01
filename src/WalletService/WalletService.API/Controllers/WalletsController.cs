@@ -26,8 +26,7 @@ public class WalletsController : ControllerBase
     public async Task<IActionResult> SeedAsync([FromBody] SeedWalletRequest request,
         CancellationToken ct)
     {
-        await _mediator.Send(
-            new SeedWalletCommand(request.UserId, request.InitialBalance), ct);
+        await _mediator.Send(new SeedWalletCommand(request.UserId, request.InitialBalance), ct);
 
         return Ok();
     }

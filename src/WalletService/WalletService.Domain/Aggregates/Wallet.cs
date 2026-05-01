@@ -13,8 +13,7 @@ public class Wallet
     
     public void ClearDomainEvents() => _events.Clear();
 
-    public static Wallet Create(Guid userId, decimal initialBalance) 
-        => new Wallet { Id = Guid.NewGuid(), UserId = userId, Balance = initialBalance };
+    public static Wallet Create(Guid userId, decimal initialBalance) => new Wallet { Id = Guid.NewGuid(), UserId = userId, Balance = initialBalance };
 
     public void Debit(decimal amount, Guid orderId)
     {

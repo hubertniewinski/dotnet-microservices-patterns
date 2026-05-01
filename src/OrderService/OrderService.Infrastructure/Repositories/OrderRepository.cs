@@ -17,9 +17,16 @@ public class OrderRepository : IOrderRepository
     public async Task<Order?> GetByIdAsync(Guid id, CancellationToken ct = default)
         => await _db.Orders.FirstOrDefaultAsync(o => o.Id == id, ct);
 
-    public async Task SaveAsync(Order order, CancellationToken ct)
+    public async Task SaveAsync(Order order, bool isNew, CancellationToken ct)
     {
-        _db.Orders.Update(order);
+        if (isNew)
+        {
+            _db.Orders.Add(order);
+        }
+        else
+        {
+            _db.Orders.Update(order);
+        }
 
         foreach (var evt in order.DomainEvents)
         {
@@ -29,7 +36,8 @@ public class OrderRepository : IOrderRepository
                 _ => null
             };
 
-            if (contractEvent is null) {
+            if (contractEvent is null)
+            {
                 continue;
             }
 

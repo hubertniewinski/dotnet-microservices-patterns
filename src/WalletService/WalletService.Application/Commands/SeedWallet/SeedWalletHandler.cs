@@ -13,6 +13,6 @@ public class SeedWalletHandler : IRequestHandler<SeedWalletCommand>
     public async Task Handle(SeedWalletCommand cmd, CancellationToken ct)
     {
         var wallet = Wallet.Create(cmd.UserId, cmd.InitialBalance);
-        await _repository.SaveAsync(wallet, ct);
+        await _repository.SaveAsync(wallet, isNew: true, ct);
     }
 }

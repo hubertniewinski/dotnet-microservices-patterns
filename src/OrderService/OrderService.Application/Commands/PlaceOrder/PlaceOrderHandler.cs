@@ -13,7 +13,7 @@ public class PlaceOrderHandler : IRequestHandler<PlaceOrderCommand, Guid>
     public async Task<Guid> Handle(PlaceOrderCommand cmd, CancellationToken ct)
     {
         var order = Order.Create(cmd.UserId, cmd.Amount);
-        await _repository.SaveAsync(order, ct);
+        await _repository.SaveAsync(order, true, ct);
         return order.Id;
     }
 }

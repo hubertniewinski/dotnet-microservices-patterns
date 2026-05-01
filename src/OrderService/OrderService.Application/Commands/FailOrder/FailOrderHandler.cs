@@ -15,6 +15,6 @@ public class FailOrderHandler : IRequestHandler<FailOrderCommand>
         var order = await _repository.GetByIdAsync(cmd.OrderId, ct) ?? throw new DomainException($"Order not found {cmd.OrderId}");
 
         order.Fail();
-        await _repository.SaveAsync(order, ct);
+        await _repository.SaveAsync(order, ct: ct);
     }
 }

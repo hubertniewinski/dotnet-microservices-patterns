@@ -16,6 +16,6 @@ public class ConfirmOrderHandler : IRequestHandler<ConfirmOrderCommand>
             ?? throw new DomainException($"Order not found {cmd.OrderId}");
 
         order.Confirm();
-        await _repository.SaveAsync(order, ct);
+        await _repository.SaveAsync(order, ct: ct);
     }
 }

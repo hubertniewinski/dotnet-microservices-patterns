@@ -17,9 +17,16 @@ public class WalletRepository : IWalletRepository
     public async Task<Wallet?> GetByUserIdAsync(Guid userId, CancellationToken ct = default)
         => await _db.Wallets.FirstOrDefaultAsync(w => w.UserId == userId, ct);
 
-    public async Task SaveAsync(Wallet wallet, CancellationToken ct = default)
+    public async Task SaveAsync(Wallet wallet, bool isNew = false, CancellationToken ct = default)
     {
-        _db.Wallets.Update(wallet);
+        if (isNew)
+        {
+            _db.Wallets.Add(wallet);
+        }
+        else
+        {
+            _db.Wallets.Update(wallet);
+        }
 
         foreach (var evt in wallet.DomainEvents)
         {
