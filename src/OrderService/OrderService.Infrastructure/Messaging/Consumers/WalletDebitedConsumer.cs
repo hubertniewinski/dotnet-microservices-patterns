@@ -1,5 +1,5 @@
 using MassTransit;
-using MassTransit.Mediator;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using OrderService.Application.Commands.ConfirmOrder;
 using Shared.Contracts.Events;

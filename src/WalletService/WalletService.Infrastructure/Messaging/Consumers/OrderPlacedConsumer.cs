@@ -1,5 +1,5 @@
 using MassTransit;
-using MassTransit.Mediator;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using Shared.Contracts.Events;
 using WalletService.Application.Commands.DebitWallet;
