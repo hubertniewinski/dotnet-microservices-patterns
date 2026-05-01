@@ -2,6 +2,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
+using MassTransit;
+using Newtonsoft.Json;
 
 namespace WalletService.Infrastructure.Outbox;
 
@@ -29,6 +31,7 @@ public class OutboxRelay : BackgroundService
     {
         using var scope = _sp.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        var publishEndpoint = scope.ServiceProvider.GetRequiredService<IPublishEndpoint>();
 
         var messages = await db.OutboxMessages
             .Where(m => !m.Published)
@@ -39,13 +42,26 @@ public class OutboxRelay : BackgroundService
         {
             try
             {
-                // TODO: publishing to Rabbit
-                _logger.LogInformation(
-                    "Publishing outbox message {EventType} {MessageId}",
-                    message.EventType,
-                    message.Id);
+                var eventType = Type.GetType(message.EventType);
+                if (eventType is null)
+                {
+                    _logger.LogWarning("Unknown event type {EventType}", message.EventType);
+                    continue;
+                }
+
+                var payload = JsonConvert.DeserializeObject(message.Payload, eventType, new JsonSerializerSettings
+                {
+                    TypeNameHandling = TypeNameHandling.All
+                });
+
+                if (payload is not null)
+                {
+                    await publishEndpoint.Publish(payload, eventType, ct);
+                }
 
                 message.Published = true;
+
+                _logger.LogInformation("Published outbox message {EventType} {MessageId}", message.EventType, message.Id);
             }
             catch (Exception ex)
             {

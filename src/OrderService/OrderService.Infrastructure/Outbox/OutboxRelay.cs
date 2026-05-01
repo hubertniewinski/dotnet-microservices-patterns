@@ -45,8 +45,7 @@ public class OutboxRelay : BackgroundService
                 var eventType = Type.GetType(message.EventType);
                 if (eventType is null)
                 {
-                    _logger.LogWarning(
-                        "Unknown event type {EventType}", message.EventType);
+                    _logger.LogWarning("Unknown event type {EventType}", message.EventType);
                     continue;
                 }
 
