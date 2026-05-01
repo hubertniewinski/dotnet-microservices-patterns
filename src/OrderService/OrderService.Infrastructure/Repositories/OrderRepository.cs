@@ -3,6 +3,8 @@ using OrderService.Domain.Interfaces;
 using OrderService.Infrastructure.Outbox;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using Shared.Contracts.Events;
+using OrderService.Domain.Events;
 
 namespace OrderService.Infrastructure.Repositories;
 
@@ -21,13 +23,20 @@ public class OrderRepository : IOrderRepository
 
         foreach (var evt in order.DomainEvents)
         {
+            var contractEvent = evt switch
+            {
+                OrderPlaced e => (object)new OrderPlacedEvent(e.OrderId, e.UserId, e.Amount),
+                _ => null
+            };
+
+            if (contractEvent is null) {
+                continue;
+            }
+
             await _db.OutboxMessages.AddAsync(new OutboxMessage
             {
-                EventType = evt.GetType().Name,
-                Payload = JsonConvert.SerializeObject(evt, new JsonSerializerSettings
-                {
-                    TypeNameHandling = TypeNameHandling.All
-                })
+                EventType = contractEvent.GetType().AssemblyQualifiedName!,
+                Payload = JsonConvert.SerializeObject(contractEvent)
             }, ct);
         }
 

@@ -6,6 +6,9 @@
     <Project Path="src/OrderService/OrderService.Domain/OrderService.Domain.csproj" />
     <Project Path="src/OrderService/OrderService.Infrastructure/OrderService.Infrastructure.csproj" />
   </Folder>
+  <Folder Name="/src/Shared/">
+    <Project Path="src/Shared/Shared.Contracts/Shared.Contracts.csproj" />
+  </Folder>
   <Folder Name="/src/WalletService/">
     <Project Path="src/WalletService/WalletService.API/WalletService.API.csproj" />
     <Project Path="src/WalletService/WalletService.Application/WalletService.Application.csproj" />
