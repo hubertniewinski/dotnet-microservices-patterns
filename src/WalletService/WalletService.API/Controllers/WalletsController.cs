@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using WalletService.API.Requests;
 using WalletService.Application.Commands.DebitWallet;
 using WalletService.Application.Commands.SeedWallet;
+using WalletService.Application.Queries.CheckBalance;
 
 namespace WalletService.API.Controllers;
 
@@ -29,6 +30,14 @@ public class WalletsController : ControllerBase
         await _mediator.Send(new SeedWalletCommand(request.UserId, request.InitialBalance), ct);
 
         return Ok();
+    }
+
+    [HttpGet("balance/{userId:guid}/{amount:decimal}")]
+    public async Task<IActionResult> CheckBalanceAsync(Guid userId, decimal amount, CancellationToken ct)
+    {
+        var result = await _mediator.Send(new CheckBalanceQuery(userId, amount), ct);
+
+        return result ? Ok() : BadRequest("Insufficient balance");
     }
 
     [HttpGet("chaos")]

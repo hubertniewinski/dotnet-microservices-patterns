@@ -30,7 +30,8 @@ services:
       - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=OrderServiceDb;User Id=SA;Password=${SA_PASSWORD};TrustServerCertificate=True
       - RabbitMq__Host=rabbitmq
       - RabbitMq__Username=${RABBITMQ_USER}
-      - RabbitMq__Password=${RABBITMQ_PASSWORD}
+      - RabbitMq__Password=${RABBITMQ_PASSWORD} 
+      - WalletService__BaseUrl=http://walletservice:8080
     depends_on:
       - sqlserver
       - rabbitmq
