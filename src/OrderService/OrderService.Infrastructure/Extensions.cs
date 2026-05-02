@@ -2,7 +2,6 @@ using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using OrderService.Application.Interfaces;
 using OrderService.Domain.Interfaces;
 using OrderService.Infrastructure.Http;
@@ -30,27 +29,18 @@ public static class Extensions
         services.AddHttpClient<IWalletClient, WalletClient>(client =>
         {
             client.BaseAddress = new Uri(configuration["WalletService:BaseUrl"]!);
-            client.Timeout = TimeSpan.FromMilliseconds(500);
         })
-        .AddPolicyHandler((serviceProvider, _) =>
-        {
-            var logger = serviceProvider.GetRequiredService<ILogger<WalletClient>>();
-
-            return HttpPolicyExtensions
-                .HandleTransientHttpError()
-                .CircuitBreakerAsync(
-                    handledEventsAllowedBeforeBreaking: 5,
-                    durationOfBreak: TimeSpan.FromSeconds(30),
-                    onBreak: (outcome, breakDelay) =>
-                    {
-                        logger.LogWarning(
-                            "Circuit opened for {BreakDelay}s due to {Reason}",
-                            breakDelay.TotalSeconds,
-                            outcome.Exception?.Message ?? outcome.Result?.StatusCode.ToString());
-                    },
-                    onReset: () => logger.LogInformation("Circuit closed"),
-                    onHalfOpen: () => logger.LogInformation("Circuit half-open — trial request"));
-        })
+        .AddPolicyHandler(HttpPolicyExtensions
+            .HandleTransientHttpError()
+            .CircuitBreakerAsync(
+                handledEventsAllowedBeforeBreaking: 5,
+                durationOfBreak: TimeSpan.FromSeconds(30),
+                onBreak: (outcome, breakDelay) =>
+                {
+                    Console.WriteLine($"Circuit opened for {breakDelay.TotalSeconds}s");
+                },
+                onReset: () => Console.WriteLine("Circuit closed"),
+                onHalfOpen: () => Console.WriteLine("Circuit half-open")))
         .AddPolicyHandler(HttpPolicyExtensions
             .HandleTransientHttpError()
             .WaitAndRetryAsync(3, retryAttempt =>

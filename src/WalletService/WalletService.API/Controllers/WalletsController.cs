@@ -43,7 +43,6 @@ public class WalletsController : ControllerBase
     [HttpGet("chaos")]
     public async Task<IActionResult> ChaosAsync()
     {
-        await Task.Delay(2000);
         return StatusCode(500);
     }
 }
