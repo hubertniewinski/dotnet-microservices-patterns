@@ -4,6 +4,7 @@ Practical reference implementation of microservices patterns in .NET.
 
 ## Architecture
 
+```
 ┌─────────────────────────────────────────────────────┐
 │                   docker-compose                    │
 │                                                     │
@@ -31,6 +32,7 @@ Practical reference implementation of microservices patterns in .NET.
 │            └─────────────────┘                    │
 │               Saga (choreography)                  │
 └─────────────────────────────────────────────────────┘
+```
 
 ## Patterns
 
