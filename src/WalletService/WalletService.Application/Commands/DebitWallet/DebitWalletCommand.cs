@@ -2,4 +2,4 @@ using MediatR;
 
 namespace WalletService.Application.Commands.DebitWallet;
 
-public record DebitWalletCommand(Guid UserId, Guid OrderId, decimal Amount) : IRequest;
+public record DebitWalletCommand(Guid IdempotencyKey, Guid UserId, Guid OrderId, decimal Amount) : IRequest;

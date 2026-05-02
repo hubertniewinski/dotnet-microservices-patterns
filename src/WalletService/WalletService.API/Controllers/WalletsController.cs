@@ -18,7 +18,7 @@ public class WalletsController : ControllerBase
     [HttpPost("debit")]
     public async Task<IActionResult> DebitAsync([FromBody] DebitWalletRequest request, CancellationToken ct)
     {
-        await _mediator.Send(new DebitWalletCommand(request.UserId, request.OrderId, request.Amount), ct);
+        await _mediator.Send(new DebitWalletCommand(request.IdempotencyKey, request.UserId, request.OrderId, request.Amount), ct);
 
         return Ok();
     }

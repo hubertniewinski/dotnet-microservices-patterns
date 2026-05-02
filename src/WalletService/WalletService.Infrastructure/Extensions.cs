@@ -2,6 +2,7 @@ using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using WalletService.Application.Interfaces;
 using WalletService.Domain.Interfaces;
 using WalletService.Infrastructure.Messaging.Consumers;
 using WalletService.Infrastructure.Outbox;
@@ -18,6 +19,7 @@ public static class Extensions
                 configuration.GetConnectionString("DefaultConnection")));
 
         services.AddScoped<IWalletRepository, WalletRepository>();
+        services.AddScoped<IIdempotencyRepository, IdempotencyRepository>();
         services.AddHostedService<OutboxRelay>();
 
         services.AddMassTransit(x =>

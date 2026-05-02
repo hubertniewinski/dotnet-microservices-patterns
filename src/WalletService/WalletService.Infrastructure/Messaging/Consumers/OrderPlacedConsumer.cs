@@ -22,6 +22,6 @@ public class OrderPlacedConsumer : IConsumer<OrderPlacedEvent>
         var message = context.Message;
         _logger.LogInformation("Received OrderPlaced for Order {OrderId}", message.OrderId);
 
-        await _mediator.Send(new DebitWalletCommand(message.UserId, message.OrderId, message.Amount));
+        await _mediator.Send(new DebitWalletCommand(message.OrderId, message.UserId, message.OrderId, message.Amount));
     }
 }
